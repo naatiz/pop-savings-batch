@@ -1,0 +1,63 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+ 	
+	<id>pop-savings-batch</id>
+	<formats>
+		<format>zip</format>
+		<format>tar.gz</format>
+	</formats>
+	<fileSets>
+		<!-- Retrieving the jar file -->
+		<fileSet>
+			<directory>target</directory>
+			<outputDirectory>bin</outputDirectory>
+			<includes>
+				<include>*.jar</include>
+			</includes>
+		</fileSet>
+		<!-- Creating log directory -->
+		<fileSet>
+			<directory>target/logs</directory>
+			<outputDirectory>logs</outputDirectory>
+			<includes>
+				<include>*.log</include>
+			</includes>
+		</fileSet>
+		<!-- Retrieving shell scripting for launching the batch -->
+		<fileSet>
+			<directory>src/main/resources</directory>
+			<outputDirectory>bin</outputDirectory>
+			<includes>
+				<include>*.sh</include>
+				<include>*.ksh</include>
+			</includes>
+			<lineEnding>unix</lineEnding>
+			<fileMode>0755</fileMode>
+		</fileSet>
+		<fileSet>
+			<directory>src/main/resources</directory>
+			<outputDirectory>conf</outputDirectory>
+			<includes>
+				<include>*.properties</include>
+				<include>*.cfg</include>
+			</includes>
+			<lineEnding>unix</lineEnding>
+		</fileSet>
+	</fileSets>
+	<!-- Retrieving dependencies and putting them into lib directory -->
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>/lib</outputDirectory>
+		</dependencySet>
+	</dependencySets>
+	<!--symlinks>
+		<symlink>
+			<name>log</name>
+			<destination>../../pop.log</destination>
+		</symlink>
+		<symlink>
+			<name>logs</name>
+			<destination>/logs/path/to/logDir</destination>
+		</symlink>
+	</symlinks-->
+</assembly>

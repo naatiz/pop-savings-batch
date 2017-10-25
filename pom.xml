@@ -1,0 +1,165 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.github.naatiz.batch</groupId>
+	<artifactId>pop-savings-batch</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>Savings Batch</name>
+	<description>Savings batch using Push Or Pull Batch API</description>
+	<url>https://naatiz.wordpress.com</url>
+	<licenses>
+		<license>
+			<name>Apache License 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
+
+	<organization>
+		<name>Natiz consulting</name>
+		<url>http://naatiz.wordpress.com</url>
+	</organization>
+
+	<ciManagement>
+		<system>Travis</system>
+		<url>https://travis-ci.org/naatiz/${project.artifactId}</url>
+	</ciManagement>
+
+	<scm>
+		<connection>scm:git:git://github.com/naatiz/${project.artifactId}.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:naatiz/${project.artifactId}.git</developerConnection>
+		<url>https://github.com/naatiz/${project.artifactId}.git</url>
+		<tag>HEAD</tag>
+	</scm>
+	<distributionManagement>
+		<repository>
+			<id>ossrh</id>
+			<name>default</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<name>default</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<properties>
+		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+
+		<!-- Junit maven plugins -->
+		<junit.version>4.12</junit.version>
+		<junit.jupiter.version>5.0.0-M3</junit.jupiter.version>
+		<junit.platform.version>1.0.0-M3</junit.platform.version>
+		<junit.vintage.version>${junit.version}.0-M3</junit.vintage.version>
+
+		<pop.batch.version>1.0.1-SNAPSHOT</pop.batch.version>
+
+		<!-- compiler maven plugins -->
+		<compiler.plugin.version>3.6.1</compiler.plugin.version>
+		<compiler.plugin.target>1.8</compiler.plugin.target>
+		<compiler.plugin.source>1.8</compiler.plugin.source>
+
+		<surefire.plugin.version>2.19.1</surefire.plugin.version>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${compiler.plugin.version}</version>
+				<configuration>
+					<source>${compiler.plugin.source}</source>
+					<target>${compiler.plugin.target}</target>
+					<archive>
+						<manifestEntries>
+							<Class-Path>../conf/</Class-Path>
+						</manifestEntries>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>cg.naatiz.batch.savings.SavingsBatch</mainClass>
+							<classpathPrefix>../lib/</classpathPrefix>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${surefire.plugin.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.junit.platform</groupId>
+						<artifactId>junit-platform-surefire-provider</artifactId>
+						<version>${junit.platform.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.junit.jupiter</groupId>
+						<artifactId>junit-jupiter-engine</artifactId>
+						<version>${junit.jupiter.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.junit.vintage</groupId>
+						<artifactId>junit-vintage-engine</artifactId>
+						<version>${junit.vintage.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.junit.vintage</groupId>
+						<artifactId>junit-vintage-engine</artifactId>
+						<version>${junit.vintage.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<descriptors>
+						<descriptor>src/assembly/delivery.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/assembly/delivery.xml</descriptor>
+							</descriptors>
+							<appendAssemblyId>false</appendAssemblyId>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>com.github.naatiz.batch.pop</groupId>
+			<artifactId>pop-batch</artifactId>
+			<version>${pop.batch.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit.jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<profiles>
+		<!-- Profil de l'environnement de developpement -->
+		<profile>
+			<id>developpement</id>
+			<activation>
+				<property>
+					<name>env</name>
+					<value>developpement</value>
+				</property>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<env>developpement</env>
+			</properties>
+		</profile>
+	</profiles>
+</project>
