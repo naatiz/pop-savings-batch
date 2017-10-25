@@ -49,9 +49,10 @@ public class AccountProvider implements Puller<Account> {
 		Container<Account> container = Pop.newInstance(Container.class);
 		for (int i = 0; i < MAX_CONTAINER_SIZE; i++) {
 			Account account = Pop.newInstance(Account.class);
-			account.setAccountID(Long.valueOf(i));
-			account.setAmount(BigDecimal.valueOf(ThreadLocalRandom.current().nextLong(MAX_CONTAINER_SIZE), BigDecimal.ROUND_HALF_UP));
-			//"" + ThreadLocalRandom.current().nextInt(MAX_CONTAINER_SIZE);
+			account.setAccountID(1 + i * CURRENT_CONTAINER_NUMBER.get());
+			account.setRate(BigDecimal.valueOf(ThreadLocalRandom.current().nextLong(MAX_CONTAINER_SIZE),
+					BigDecimal.ROUND_HALF_UP));
+			// "" + ThreadLocalRandom.current().nextInt(MAX_CONTAINER_SIZE);
 			container.addItem(account);
 		}
 		CURRENT_CONTAINER_NUMBER.incrementAndGet();

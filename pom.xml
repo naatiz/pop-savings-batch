@@ -17,7 +17,7 @@
 
 	<organization>
 		<name>Natiz consulting</name>
-		<url>http://naatiz.wordpress.com</url>
+		<url>https://naatiz.wordpress.com</url>
 	</organization>
 
 	<ciManagement>
@@ -46,12 +46,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
-
-		<!-- Junit maven plugins -->
-		<junit.version>4.12</junit.version>
-		<junit.jupiter.version>5.0.0-M3</junit.jupiter.version>
-		<junit.platform.version>1.0.0-M3</junit.platform.version>
-		<junit.vintage.version>${junit.version}.0-M3</junit.vintage.version>
+		<junit.jupiter.version>5.4.2</junit.jupiter.version>
 
 		<pop.batch.version>1.0.1-SNAPSHOT</pop.batch.version>
 
@@ -60,11 +55,14 @@
 		<compiler.plugin.target>1.8</compiler.plugin.target>
 		<compiler.plugin.source>1.8</compiler.plugin.source>
 
-		<surefire.plugin.version>2.19.1</surefire.plugin.version>
+		<surefire.plugin.version>2.22.1</surefire.plugin.version>
+		<antrun.plugin.version>1.8</antrun.plugin.version>
+		<assembly.plugin.version>3.1.0</assembly.plugin.version>
 	</properties>
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${compiler.plugin.version}</version>
 				<configuration>
@@ -83,49 +81,72 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${surefire.plugin.version}</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.junit.platform</groupId>
-						<artifactId>junit-platform-surefire-provider</artifactId>
-						<version>${junit.platform.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.junit.jupiter</groupId>
-						<artifactId>junit-jupiter-engine</artifactId>
-						<version>${junit.jupiter.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.junit.vintage</groupId>
-						<artifactId>junit-vintage-engine</artifactId>
-						<version>${junit.vintage.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.junit.vintage</groupId>
-						<artifactId>junit-vintage-engine</artifactId>
-						<version>${junit.vintage.version}</version>
-					</dependency>
-				</dependencies>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>${antrun.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>prepare-delivery</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<mkdir dir="${project.basedir}/target/package" />
+								<symlink link="${project.basedir}/target/package/logs"
+									resource="${app.log.file}" failonerror="false" />
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>${assembly.plugin.version}</version>
 				<configuration>
 					<descriptors>
-						<descriptor>src/assembly/delivery.xml</descriptor>
+						<descriptor>${project.basedir}/src/assembly/delivery.xml</descriptor>
 					</descriptors>
 				</configuration>
 				<executions>
 					<execution>
+						<id>dev</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<descriptors>
-								<descriptor>src/assembly/delivery.xml</descriptor>
-							</descriptors>
+							<filters>
+								<filter>${project.basedir}/src/assembly/filter-dev.properties</filter>
+							</filters>
+							<finalName>${project.artifactId}-dev-${project.version}</finalName>
+							<ignoreDirFormatExtensions>true</ignoreDirFormatExtensions>
+							<!--descriptors> <descriptor>${project.basedir}/src/assembly/delivery.xml</descriptor> 
+								</descriptors -->
+							<appendAssemblyId>false</appendAssemblyId>
+						</configuration>
+					</execution>
+					<execution>
+						<id>prod</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<filters>
+								<filter>${project.basedir}/src/assembly/filter-prod.properties</filter>
+							</filters>
+							<finalName>${project.artifactId}-prod-${project.version}</finalName>
+							<ignoreDirFormatExtensions>true</ignoreDirFormatExtensions>
+							<!--descriptors> <descriptor>${project.basedir}/src/assembly/delivery.xml</descriptor> 
+								</descriptors -->
 							<appendAssemblyId>false</appendAssemblyId>
 						</configuration>
 					</execution>
@@ -145,6 +166,12 @@
 			<version>${junit.jupiter.version}</version>
 			<scope>test</scope>
 		</dependency>
+	    <dependency>
+	        <groupId>org.junit.jupiter</groupId>
+	        <artifactId>junit-jupiter-engine</artifactId>
+	        <version>${junit.jupiter.version}</version>
+	        <scope>test</scope>
+	    </dependency>
 	</dependencies>
 	<profiles>
 		<!-- Profil de l'environnement de developpement -->
@@ -153,12 +180,26 @@
 			<activation>
 				<property>
 					<name>env</name>
-					<value>developpement</value>
+					<value>dev</value>
 				</property>
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<env>developpement</env>
+				<env>dev</env>
+			</properties>
+		</profile>
+		<!-- Profil de l'environnement de prod -->
+		<profile>
+			<id>production</id>
+			<activation>
+				<property>
+					<name>env</name>
+					<value>prod</value>
+				</property>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<env>prod</env>
 			</properties>
 		</profile>
 	</profiles>
