@@ -17,7 +17,7 @@
 
 	<organization>
 		<name>Natiz consulting</name>
-		<url>http://naatiz.wordpress.com</url>
+		<url>https://naatiz.wordpress.com</url>
 	</organization>
 
 	<ciManagement>
@@ -63,6 +63,15 @@
 		<surefire.plugin.version>2.19.1</surefire.plugin.version>
 	</properties>
 	<build>
+		<resources>
+	      <resource>
+	        <directory>src/main/resources</directory>
+	        <filtering>true</filtering>
+	      </resource>
+	    </resources>
+	    <filters>
+      		<filter>src/assembly/template.properties</filter>
+    	</filters>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

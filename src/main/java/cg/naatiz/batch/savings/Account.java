@@ -11,8 +11,10 @@ import com.google.common.collect.Lists;
 public class Account implements Serializable {
 	
 	private Long accountID;
-	private BigDecimal amount;
 	private List<AccountPeriod> periods = Lists.newArrayList();
+	
+	/* Annual interest rate */
+	private BigDecimal rate;
 
 	public Long getAccountID() {
 		return accountID;
@@ -20,17 +22,17 @@ public class Account implements Serializable {
 	public void setAccountID(Long accountID) {
 		this.accountID = accountID;
 	}
-	public BigDecimal getAmount() {
-		return amount;
-	}
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
-	}
 
 	public List<AccountPeriod> getPeriods() {
 		return periods;
 	}
 	public void setPeriods(List<AccountPeriod> periods) {
 		this.periods = periods;
+	}
+	public BigDecimal getRate() {
+		return rate;
+	}
+	public void setRate(BigDecimal rate) {
+		this.rate = rate;
 	}
 }

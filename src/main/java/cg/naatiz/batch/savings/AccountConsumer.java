@@ -28,9 +28,6 @@ public class AccountConsumer implements Pusher<Balance> {
 
 	@Override
 	public boolean push(Optional<Container<Balance>> container) throws Exception {
-		if (container.isPresent() && container.get().getReference() == 5) {
-			logger.warn("Rejecting : {}", container);
-		}
 		logger.debug(container.toString());
 		return true;
 	}

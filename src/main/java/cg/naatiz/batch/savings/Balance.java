@@ -2,6 +2,7 @@ package cg.naatiz.batch.savings;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Period;
 
 @SuppressWarnings("serial")
 public class Balance implements Serializable {
@@ -9,6 +10,8 @@ public class Balance implements Serializable {
 	private Long accountID;
 	private BigDecimal amount;
 	private BigDecimal interest;
+	private Period period;
+	private BigDecimal averageRate;
 	
 	public Long getAccountID() {
 		return accountID;
@@ -27,5 +30,17 @@ public class Balance implements Serializable {
 	}
 	public void setInterest(BigDecimal interest) {
 		this.interest = interest;
+	}
+	public Period getPeriod() {
+		return period;
+	}
+	public void setPeriod(Period period) {
+		this.period = period;
+	}
+	public BigDecimal getAverageRate() {
+		return averageRate;
+	}
+	public void setAverageRate(BigDecimal averageRate) {
+		this.averageRate = averageRate;
 	}
 }

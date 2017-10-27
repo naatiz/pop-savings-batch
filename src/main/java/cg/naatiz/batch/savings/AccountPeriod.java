@@ -9,6 +9,8 @@ public class AccountPeriod implements Serializable {
 	
 	private BigDecimal amount;
 	private Period period;
+	
+	/* Annual interest rate */
 	private BigDecimal rate;
 	
 	public BigDecimal getAmount() {
