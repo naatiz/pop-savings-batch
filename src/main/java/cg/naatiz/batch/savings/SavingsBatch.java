@@ -51,12 +51,22 @@ public class SavingsBatch {
 		// Revival = relance ou reprise
 		logger.debug("Running options : -M=Monitoring -R=Revival");
 		if (parameters.isEmpty() || !parameters.get(0).contains("-MR")) {
-			throw new IllegalStateException("M or R option parameter is missing!");
+			throw new IllegalStateException("M (Monitoring) or R (Revival) option parameter is missing!");
 		}
 
 		logger.info("Interest batch starting ... ");
 		List<Reporting> reportings = savings.start();
 		logger.info("Reportings size: " + reportings.size());
 		logger.info("Interest batch ends successfully!");
+	}
+	
+	/**
+	 * 
+	 * @param args
+	 */
+	public static void main(String [] args)
+	{
+		/* args options : -M=Monitoring -R=Revival")*/
+		Pop.main(new String[] { "-MR" });
 	}
 }

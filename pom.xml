@@ -63,12 +63,6 @@
 		<surefire.plugin.version>2.19.1</surefire.plugin.version>
 	</properties>
 	<build>
-		<!--resources>
-			<resource>
-				<directory>${project.basedir}/src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources-->
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -115,6 +109,27 @@
 				</dependencies>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>prepare-delivery</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<mkdir dir="${project.basedir}/target/package" />
+								<symlink link="${project.basedir}/target/package/logs"
+									resource="${app.log.file}" failonerror="false" />
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>3.1.0</version>
 				<configuration>
@@ -133,7 +148,7 @@
 							<filters>
 								<filter>${project.basedir}/src/assembly/filter-dev.properties</filter>
 							</filters>
-							<finalName>${artifactId}-dev-${version}</finalName>
+							<finalName>${project.artifactId}-dev-${project.version}</finalName>
 							<ignoreDirFormatExtensions>true</ignoreDirFormatExtensions>
 							<!--descriptors> <descriptor>${project.basedir}/src/assembly/delivery.xml</descriptor> 
 								</descriptors -->
@@ -150,7 +165,7 @@
 							<filters>
 								<filter>${project.basedir}/src/assembly/filter-prod.properties</filter>
 							</filters>
-							<finalName>${artifactId}-prod-${version}</finalName>
+							<finalName>${project.artifactId}-prod-${project.version}</finalName>
 							<ignoreDirFormatExtensions>true</ignoreDirFormatExtensions>
 							<!--descriptors> <descriptor>${project.basedir}/src/assembly/delivery.xml</descriptor> 
 								</descriptors -->
@@ -200,7 +215,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<env>dev</env>
+				<env>prod</env>
 			</properties>
 		</profile>
 	</profiles>
