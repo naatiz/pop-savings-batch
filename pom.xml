@@ -46,12 +46,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
-
-		<!-- Junit maven plugins -->
-		<junit.version>4.12</junit.version>
-		<junit.jupiter.version>5.0.0-M3</junit.jupiter.version>
-		<junit.platform.version>1.0.0-M3</junit.platform.version>
-		<junit.vintage.version>${junit.version}.0-M3</junit.vintage.version>
+		<junit.jupiter.version>5.4.2</junit.jupiter.version>
 
 		<pop.batch.version>1.0.1-SNAPSHOT</pop.batch.version>
 
@@ -60,11 +55,14 @@
 		<compiler.plugin.target>1.8</compiler.plugin.target>
 		<compiler.plugin.source>1.8</compiler.plugin.source>
 
-		<surefire.plugin.version>2.19.1</surefire.plugin.version>
+		<surefire.plugin.version>2.22.1</surefire.plugin.version>
+		<antrun.plugin.version>1.8</antrun.plugin.version>
+		<assembly.plugin.version>3.1.0</assembly.plugin.version>
 	</properties>
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${compiler.plugin.version}</version>
 				<configuration>
@@ -83,35 +81,14 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${surefire.plugin.version}</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.junit.platform</groupId>
-						<artifactId>junit-platform-surefire-provider</artifactId>
-						<version>${junit.platform.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.junit.jupiter</groupId>
-						<artifactId>junit-jupiter-engine</artifactId>
-						<version>${junit.jupiter.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.junit.vintage</groupId>
-						<artifactId>junit-vintage-engine</artifactId>
-						<version>${junit.vintage.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.junit.vintage</groupId>
-						<artifactId>junit-vintage-engine</artifactId>
-						<version>${junit.vintage.version}</version>
-					</dependency>
-				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.8</version>
+				<version>${antrun.plugin.version}</version>
 				<executions>
 					<execution>
 						<id>prepare-delivery</id>
@@ -130,8 +107,9 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>${assembly.plugin.version}</version>
 				<configuration>
 					<descriptors>
 						<descriptor>${project.basedir}/src/assembly/delivery.xml</descriptor>
@@ -188,6 +166,12 @@
 			<version>${junit.jupiter.version}</version>
 			<scope>test</scope>
 		</dependency>
+	    <dependency>
+	        <groupId>org.junit.jupiter</groupId>
+	        <artifactId>junit-jupiter-engine</artifactId>
+	        <version>${junit.jupiter.version}</version>
+	        <scope>test</scope>
+	    </dependency>
 	</dependencies>
 	<profiles>
 		<!-- Profil de l'environnement de developpement -->
