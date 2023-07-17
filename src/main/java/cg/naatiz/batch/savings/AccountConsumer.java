@@ -5,29 +5,30 @@ package cg.naatiz.batch.savings;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 
-import cg.naatiz.batch.pop.Container;
-import cg.naatiz.batch.pop.Pusher;
-import cg.naatiz.batch.pop.util.Controller;
-import cg.naatiz.batch.pop.util.ControllerType;
+import cg.naatiz.pop.Container;
+import cg.naatiz.pop.api.IConsumer;
+import cg.naatiz.pop.util.Controller;
+import cg.naatiz.pop.util.ControllerType;
+import jakarta.enterprise.context.Dependent;
+import jakarta.inject.Inject;
 
 /**
- * @author natiz
+ * @author naatiz
  * 
  */
 @SuppressWarnings("serial")
 @Controller(ControllerType.CONSUMER)
 @Interest
-public class AccountConsumer implements Pusher<Balance> {
+@Dependent
+public class AccountConsumer implements IConsumer<Balance> {
 
 	@Inject
 	private Logger logger;
 
 	@Override
-	public boolean push(Optional<Container<Balance>> container) throws Exception {
+	public boolean consume(Optional<Container<Balance>> container) throws Exception {
 		logger.debug(container.toString());
 		return true;
 	}

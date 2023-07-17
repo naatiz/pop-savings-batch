@@ -4,28 +4,33 @@
 package cg.naatiz.batch.savings;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 
-import cg.naatiz.batch.pop.Container;
-import cg.naatiz.batch.pop.Pop;
-import cg.naatiz.batch.pop.Puller;
-import cg.naatiz.batch.pop.util.Controller;
-import cg.naatiz.batch.pop.util.ControllerType;
+import cg.naatiz.pop.Container;
+import cg.naatiz.pop.Pop;
+import cg.naatiz.pop.api.IProducer;
+import cg.naatiz.pop.util.Controller;
+import cg.naatiz.pop.util.ControllerType;
+import jakarta.enterprise.context.Dependent;
+import jakarta.inject.Inject;
 
 /**
- * @author natiz
+ * @author naatiz
  * 
  */
 @SuppressWarnings("serial")
 @Controller(ControllerType.PROVIDER)
 @Interest
-public class AccountProvider implements Puller<Account> {
+@Dependent
+public class AccountProvider implements IProducer<Account> {
 
 	/* maximum number of containers */
 	private static final long MAX_CONTAINER_NUMBER = 1000;
@@ -40,26 +45,31 @@ public class AccountProvider implements Puller<Account> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Optional<Container<Account>> pull() throws Exception {
+	public Optional<Container<Account>> produce() throws Exception {
 
 		if (!hasMoreData()) {
 			logger.info("No data anymore...");
 			return Optional.empty();
 		}
-		Container<Account> container = Pop.newInstance(Container.class);
-		for (int i = 0; i < MAX_CONTAINER_SIZE; i++) {
+		
+		List<Account> items = new ArrayList<>();
+		int size = ThreadLocalRandom.current().nextInt(500, MAX_CONTAINER_SIZE);
+		for (int i = 0; i < size; i++) {
 			Account account = Pop.newInstance(Account.class);
 			account.setAccountID(1 + i * CURRENT_CONTAINER_NUMBER.get());
-			account.setRate(BigDecimal.valueOf(ThreadLocalRandom.current().nextLong(MAX_CONTAINER_SIZE),
-					BigDecimal.ROUND_HALF_UP));
-			// "" + ThreadLocalRandom.current().nextInt(MAX_CONTAINER_SIZE);
-			container.addItem(account);
+			
+			BigDecimal rate = new BigDecimal(
+					ThreadLocalRandom.current().nextLong(100L, MAX_CONTAINER_SIZE),
+					new MathContext(3, RoundingMode.HALF_UP));
+			account.setRate(rate);
+			items.add(account);
 		}
-		CURRENT_CONTAINER_NUMBER.incrementAndGet();
+		Container<Account> container = Pop.newInstance(Container.class)
+				.addItems(items);
 		return Optional.of(container);
 	}
 
 	private boolean hasMoreData() {
-		return CURRENT_CONTAINER_NUMBER.get() < MAX_CONTAINER_NUMBER;
+		return CURRENT_CONTAINER_NUMBER.incrementAndGet() < MAX_CONTAINER_NUMBER;
 	}
 }

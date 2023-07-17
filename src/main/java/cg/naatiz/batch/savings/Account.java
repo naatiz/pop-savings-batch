@@ -2,16 +2,14 @@ package cg.naatiz.batch.savings;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.Lists;
-
 
 @SuppressWarnings("serial")
 public class Account implements Serializable {
 	
 	private Long accountID;
-	private List<AccountPeriod> periods = Lists.newArrayList();
+	private List<AccountPeriod> periods = new ArrayList<AccountPeriod>();
 	
 	/* Annual interest rate */
 	private BigDecimal rate;

@@ -7,25 +7,26 @@ import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 
-import cg.naatiz.batch.pop.Pop;
-import cg.naatiz.batch.pop.Processor;
-import cg.naatiz.batch.pop.util.Controller;
-import cg.naatiz.batch.pop.util.ControllerType;
+import cg.naatiz.pop.Pop;
+import cg.naatiz.pop.api.IProcessor;
+import cg.naatiz.pop.util.Controller;
+import cg.naatiz.pop.util.ControllerType;
+import jakarta.enterprise.context.Dependent;
+import jakarta.inject.Inject;
 
 /**
  * Processing an amount in string type and compute its value plus 5-15 %
  * 
- * @author natiz
+ * @author naatiz
  * 
  */
 @SuppressWarnings("serial")
 @Controller(ControllerType.PROCESSOR)
 @Interest
-public class AcccountProcessor implements Processor<Account, Balance> {
+@Dependent
+public class AcccountProcessor implements IProcessor<Account, Balance> {
 
 	@Inject
 	private Logger logger;
