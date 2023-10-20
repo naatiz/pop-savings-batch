@@ -52,7 +52,7 @@
 		
 		<junit-jupiter.version>5.9.3</junit-jupiter.version>
 
-		<pop.batch.version>1.0.0-SNAPSHOT</pop.batch.version>
+		<pop.batch.version>1.0.0</pop.batch.version>
 
 		<!-- compiler maven plugins -->
 		<compiler.plugin.version>3.11.0</compiler.plugin.version>
