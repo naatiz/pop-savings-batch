@@ -30,7 +30,7 @@ import jakarta.inject.Inject;
 @Controller(ControllerType.PROVIDER)
 @Interest
 @Dependent
-public class AccountProvider implements IProducer<Account> {
+public class Provider implements IProducer<Account> {
 
 	/* maximum number of containers */
 	private static final long MAX_CONTAINER_NUMBER = 1000;

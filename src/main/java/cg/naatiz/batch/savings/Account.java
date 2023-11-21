@@ -9,7 +9,7 @@ import java.util.List;
 public class Account implements Serializable {
 	
 	private Long accountID;
-	private List<AccountPeriod> periods = new ArrayList<AccountPeriod>();
+	private List<Period> periods = new ArrayList<Period>();
 	
 	/* Annual interest rate */
 	private BigDecimal rate;
@@ -21,10 +21,10 @@ public class Account implements Serializable {
 		this.accountID = accountID;
 	}
 
-	public List<AccountPeriod> getPeriods() {
+	public List<Period> getPeriods() {
 		return periods;
 	}
-	public void setPeriods(List<AccountPeriod> periods) {
+	public void setPeriods(List<Period> periods) {
 		this.periods = periods;
 	}
 	public BigDecimal getRate() {

@@ -26,7 +26,7 @@ import jakarta.inject.Inject;
 @Controller(ControllerType.PROCESSOR)
 @Interest
 @Dependent
-public class AcccountProcessor implements IProcessor<Account, Balance> {
+public class Processor implements IProcessor<Account, Balance> {
 
 	@Inject
 	private Logger logger;

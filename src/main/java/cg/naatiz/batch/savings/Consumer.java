@@ -22,7 +22,7 @@ import jakarta.inject.Inject;
 @Controller(ControllerType.CONSUMER)
 @Interest
 @Dependent
-public class AccountConsumer implements IConsumer<Balance> {
+public class Consumer implements IConsumer<Balance> {
 
 	@Inject
 	private Logger logger;
